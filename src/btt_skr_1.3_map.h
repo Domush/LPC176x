@@ -116,6 +116,9 @@ void board_init (void);
 #define M3_ENABLE_PN            2
 #define M3_ENABLE_PORT          port(M3_ENABLE_PN)
 #define M3_ENABLE_PIN           12
+#define M3_LIMIT_PORT           Y_LIMIT_PORT_MAX
+#define M3_LIMIT_PIN            Y_LIMIT_PIN_MAX
+
 #endif
 
 // Define ganged axis or B axis step pulse and step direction output pins.
@@ -133,9 +136,9 @@ void board_init (void);
 #endif
 
 // Define probe switch input pin.
-#define PROBE_PN                0
+#define PROBE_PN                1
 #define PROBE_PORT              port(PROBE_PN)
-#define PROBE_PIN               12
+#define PROBE_PIN               24
 
 // Define spindle enable and spindle direction output pins.
 #define SPINDLE_ENABLE_PN       1
