@@ -35,8 +35,8 @@
 
 #if SDCARD_ENABLE
 #include "sdcard/sdcard.h"
-#include "ff.h"
-#include "diskio.h"
+#include "fatfs/ff.h"
+#include "fatfs/diskio.h"
 #endif
 
 #if FLASH_ENABLE

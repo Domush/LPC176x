@@ -43,9 +43,9 @@ typedef struct {
 } fan_settings_t;
 
 static const char *fan_names[] = {
-    "Fan 0",
-    "Fan 1",
-    "Fan 2",
+    "Controller Fan",
+    "Case Fan",
+    "LED Light",
     "Fan 3"
 };
 

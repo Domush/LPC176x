@@ -18,8 +18,8 @@
 
 #if SDCARD_ENABLE
 
-#include "ff.h"
-#include "diskio.h"
+#include "fatfs/ff.h"
+#include "fatfs/diskio.h"
 
 #if SD_SPI_PORT == 0
     #define LPC_SD_PORT LPC_SSP0
@@ -274,7 +274,7 @@ BOOL xmit_datablock (
         } while (--wc);
         xmit_spi(0xFF);                    /* CRC (Dummy) */
         xmit_spi(0xFF);
-        resp = rcvr_spi();                /* Reveive data response */
+        resp = rcvr_spi();                /* Receive data response */
         if ((resp & 0x1F) != 0x05)        /* If not accepted, return with error */
             return FALSE;
     }
@@ -379,14 +379,14 @@ BYTE send_cmd12 (void)
 /*-----------------------------------------------------------------------*/
 
 DSTATUS disk_initialize (
-    BYTE drv        /* Physical drive nmuber (0) */
+    BYTE pdrv        /* Physical drive number (0) */
 )
 {
     BYTE n, ty, ocr[4];
 
 
 //  pinOut(7, 1);
-    if (drv) return STA_NOINIT;            /* Supports only single drive */
+    if (pdrv) return STA_NOINIT;            /* Supports only single drive */
     if (Stat & STA_NODISK) return Stat;    /* No card in the socket */
 
     power_on();                            /* Force socket power on */
@@ -427,7 +427,7 @@ DSTATUS disk_initialize (
     DESELECT();            /* CS = H */
     rcvr_spi();            /* Idle (Release DO) */
 
-    if (ty) {            /* Initialization succeded */
+    if (ty) {            /* Initialization succeeded */
         Stat &= ~STA_NOINIT;        /* Clear STA_NOINIT */
         set_max_speed();
     } else {            /* Initialization failed */
@@ -444,10 +444,10 @@ DSTATUS disk_initialize (
 /*-----------------------------------------------------------------------*/
 
 DSTATUS disk_status (
-    BYTE drv        /* Physical drive nmuber (0) */
+    BYTE pdrv        /* Physical drive number (0) */
 )
 {
-    if (drv) return STA_NOINIT;        /* Supports only single drive */
+    if (pdrv) return STA_NOINIT;        /* Supports only single drive */
     return Stat;
 }
 
@@ -458,13 +458,13 @@ DSTATUS disk_status (
 /*-----------------------------------------------------------------------*/
 
 DRESULT disk_read (
-    BYTE drv,            /* Physical drive nmuber (0) */
+    BYTE pdrv,            /* Physical drive number (0) */
     BYTE *buff,            /* Pointer to the data buffer to store read data */
     DWORD sector,        /* Start sector number (LBA) */
     BYTE count            /* Sector count (1..255) */
 )
 {
-    if (drv || !count) return RES_PARERR;
+    if (pdrv || !count) return RES_PARERR;
     if (Stat & STA_NOINIT) return RES_NOTRDY;
 
     if (!(CardType & 4)) sector *= 512;    /* Convert to byte address if needed */
@@ -500,13 +500,13 @@ DRESULT disk_read (
 
 #if FF_FS_READONLY == 0
 DRESULT disk_write (
-    BYTE drv,            /* Physical drive nmuber (0) */
+    BYTE pdrv,            /* Physical drive number (0) */
     const BYTE *buff,    /* Pointer to the data to be written */
     DWORD sector,        /* Start sector number (LBA) */
     BYTE count            /* Sector count (1..255) */
 )
 {
-    if (drv || !count) return RES_PARERR;
+    if (pdrv || !count) return RES_PARERR;
     if (Stat & STA_NOINIT) return RES_NOTRDY;
     if (Stat & STA_PROTECT) return RES_WRPRT;
 
@@ -547,7 +547,7 @@ DRESULT disk_write (
 /*-----------------------------------------------------------------------*/
 
 DRESULT disk_ioctl (
-    BYTE drv,        /* Physical drive nmuber (0) */
+    BYTE pdrv,        /* Physical drive number (0) */
     BYTE ctrl,        /* Control code */
     void *buff        /* Buffer to send/receive control data */
 )
@@ -557,7 +557,7 @@ DRESULT disk_ioctl (
     WORD csize;
 
 
-    if (drv) return RES_PARERR;
+    if (pdrv) return RES_PARERR;
 
     res = RES_ERROR;
 

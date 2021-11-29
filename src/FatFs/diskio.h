@@ -1,5 +1,5 @@
 /*-----------------------------------------------------------------------/
-/  Low level disk interface modlue include file   (C)ChaN, 2014          /
+/  Low level disk interface modlue include file   (C)ChaN, 2019          /
 /-----------------------------------------------------------------------*/
 
 #ifndef _DISKIO_DEFINED
@@ -32,7 +32,6 @@ DRESULT disk_read (BYTE pdrv, BYTE* buff, DWORD sector, BYTE count);
 DRESULT disk_write (BYTE pdrv, const BYTE* buff, DWORD sector, BYTE count);
 DRESULT disk_ioctl (BYTE pdrv, BYTE cmd, void* buff);
 
-void disk_timerproc (void);
 
 /* Disk Status Bits (DSTATUS) */
 
@@ -41,7 +40,7 @@ void disk_timerproc (void);
 #define STA_PROTECT		0x04	/* Write protected */
 
 
-/* Command code for disk_ioctrl fucntion */
+/* Command code for disk_ioctrl function */
 
 /* Generic command (Used by FatFs) */
 #define CTRL_SYNC			0	/* Complete pending write process (needed at FF_FS_READONLY == 0) */
